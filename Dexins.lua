@@ -1,15 +1,16 @@
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
 local Window = OrionLib:MakeWindow({Name = "Dexins", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionTest", IntroText = "Dexins Hub Loading...", IntroIcon = "rbxassetid://16924654288", Icon = "rbxassetid://16924654288"})
 local Tab = Window:MakeTab({
-	Name = "Main",
-	Icon = "rbxassetid://16924656716",
-	PremiumOnly = false
+    Name = "Main",
+    Icon = "rbxassetid://16924656716",
+    PremiumOnly = false
 })
 local Section = Tab:AddSection({
-	Name = "Esp and Tracers"
+    Name = "Esp and Tracers"
 })
 
 local espEnabled = false -- Variável para controlar se o ESP está ativado ou desativado
+local walkSpeed = 16 -- Velocidade de caminhada padrão
 
 local function criarESP(player, isMurderer, isSheriff)
     local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
@@ -130,6 +131,7 @@ Tab:AddSlider({
     Increment = 1,
     ValueName = "Speed",
     Callback = function(value)
-        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = value
+        walkSpeed = value
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = walkSpeed
     end    
 })
