@@ -120,16 +120,16 @@ Tab:AddToggle({
         atualizarESP()
     end
 })
-Tab:AddSlider({
-	Name = "W-WalkSpeed",
-	Min = 16,
-	Max = 100,
-	Default = 16,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 1,
-	ValueName = "Speed",
-	Callback = function(Value)
-		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = value
-	end    
-})
 
+Tab:AddSlider({
+    Name = "Walkspeed",
+    Min = 16,
+    Max = 64,
+    Default = 16,
+    Color = Color3.fromRGB(255,255,255),
+    Increment = 1,
+    ValueName = "Speed",
+    Callback = function(value)
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = value
+    end    
+})
