@@ -121,7 +121,7 @@ Tab:AddToggle({
     end
 })
 Tab:AddSlider({
-	Name = "WalkSpeed",
+	Name = "W-WalkSpeed",
 	Min = 16,
 	Max = 100,
 	Default = 16,
