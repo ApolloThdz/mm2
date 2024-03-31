@@ -31,13 +31,13 @@ local function criarESP(player, isMurderer, isSheriff)
 
     local espName = Instance.new("BillboardGui")
     espName.Name = "ESPName"
-    espName.Size = UDim2.new(0, 100, 0, 40)
+    espName.Size = UDim2.new(0, 100, 0, 60)  -- Ajuste para acomodar o texto da distância
     espName.AlwaysOnTop = true
     espName.StudsOffset = Vector3.new(0, 3, 0)
     espName.Parent = player.Character.Head
 
     local nameLabel = Instance.new("TextLabel")
-    nameLabel.Size = UDim2.new(1, 0, 1, 0)
+    nameLabel.Size = UDim2.new(1, 0, 0.5, 0)  -- Ajuste para o tamanho do nome
     nameLabel.Position = UDim2.new(0, 0, 0, 0)
     nameLabel.BackgroundTransparency = 1
     nameLabel.Text = name
@@ -47,8 +47,8 @@ local function criarESP(player, isMurderer, isSheriff)
     nameLabel.Parent = espName
 
     local roleLabel = Instance.new("TextLabel")
-    roleLabel.Size = UDim2.new(1, 0, 1, 0)
-    roleLabel.Position = UDim2.new(0, 0, 1, 0)
+    roleLabel.Size = UDim2.new(1, 0, 0.5, 0)  -- Ajuste para o tamanho do papel
+    roleLabel.Position = UDim2.new(0, 0, 0.5, 0)
     roleLabel.BackgroundTransparency = 1
     roleLabel.Text = isMurderer and "Murderer" or isSheriff and "Sheriff" or ""
     roleLabel.TextColor3 = espBox.Color3
@@ -57,8 +57,8 @@ local function criarESP(player, isMurderer, isSheriff)
     roleLabel.Parent = espName
 
     local distanceLabel = Instance.new("TextLabel")
-    distanceLabel.Size = UDim2.new(1, 0, 1, 0)
-    distanceLabel.Position = UDim2.new(0, 0, 2, 0)
+    distanceLabel.Size = UDim2.new(1, 0, 0.5, 0)  -- Ajuste para o tamanho da distância
+    distanceLabel.Position = UDim2.new(0, 0, 1, 0)
     distanceLabel.BackgroundTransparency = 1
     distanceLabel.Text = string.format("%.1f meters", distance)
     distanceLabel.TextColor3 = espBox.Color3
@@ -84,6 +84,7 @@ end
 local function atualizarESP()
     for _, player in ipairs(game.Players:GetPlayers()) do
         local espBox = player.Character:FindFirstChild("ESP")
+        local espName = player.Character:FindFirstChild("ESPName")  -- Adicionado para encontrar a instância do nome do ESP
         if espEnabled then
             if not espBox then
                 local isMurderer = player.Backpack:FindFirstChild("Knife") or player.Character:FindFirstChild("Knife")
@@ -91,9 +92,22 @@ local function atualizarESP()
                 if isMurderer or isSheriff then
                     criarESP(player, isMurderer, isSheriff)
                 end
+            elseif espName then  -- Se o ESP já existe, atualize a distância
+                local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
+                if humanoid then
+                    local position = humanoid.RootPart.Position
+                    local distance = (position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude
+                    local distanceLabel = espName:FindFirstChild("TextLabel")
+                    if distanceLabel then
+                        distanceLabel.Text = string.format("%.1f meters", distance)
+                    end
+                end
             end
         elseif espBox then
             espBox:Destroy()
+            if espName then
+                espName:Destroy()  -- Destruir também o nome do ESP
+            end
         end
     end
 end
@@ -106,16 +120,16 @@ Tab:AddToggle({
         atualizarESP()
     end
 })
-
 Tab:AddSlider({
-    Name = "Walkspeed",
-    Min = 16,
-    Max = 64,
-    Default = 5,
-    Color = Color3.fromRGB(255,255,255),
-    Increment = 1,
-    ValueName = "Speed",
-    Callback = function(value)
-        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = value
-    end    
+	Name = "WalkSpeed",
+	Min = 16,
+	Max = 100,
+	Default = 16,
+	Color = Color3.fromRGB(255,255,255),
+	Increment = 1,
+	ValueName = "Speed",
+	Callback = function(Value)
+		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = value
+	end    
 })
+
