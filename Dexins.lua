@@ -9,6 +9,30 @@ local Section = Tab:AddSection({
     Name = "Esp and Tracers"
 })
 
+
+Tab:AddButton({
+    Name = "Speed",
+    Callback = function()
+        print("Botão pressionado")
+        _G.HackedWalkSpeed = 19
+        local Plrs = game:GetService("Players")
+        local MyPlr = Plrs.LocalPlayer
+        local MyChar = MyPlr.Character
+
+        if MyChar then
+            local Hum = MyChar:WaitForChild("Humanoid") -- Espera até que o personagem tenha um Humanoid
+            Hum.WalkSpeed = _G.HackedWalkSpeed
+        end
+
+        MyPlr.CharacterAdded:Connect(function(Char)
+            MyChar = Char
+            local Hum = Char:WaitForChild("Humanoid") -- Espera até que o personagem tenha um Humanoid
+            Hum.WalkSpeed = _G.HackedWalkSpeed
+        end)
+    end
+})
+
+
 local espEnabled = false -- Variável para controlar se o ESP está ativado ou desativado
 local walkSpeed = 16 -- Velocidade de caminhada padrão
 
@@ -120,18 +144,4 @@ Tab:AddToggle({
         espEnabled = value
         atualizarESP()
     end
-})
-
-Tab:AddSlider({
-    Name = "Walkspeed",
-    Min = 16,
-    Max = 64,
-    Default = 16,
-    Color = Color3.fromRGB(255,255,255),
-    Increment = 1,
-    ValueName = "Speed",
-    Callback = function(value)
-        walkSpeed = value
-        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = walkSpeed
-    end    
 })
